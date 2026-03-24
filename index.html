@@ -3,26 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Fox Vuurwerk</title>
+
     <style>
         body {
             margin: 0;
-            text-align: center;
             background-color: black;
+            text-align: center;
+            font-family: Arial, sans-serif;
         }
 
         img {
             width: 100%;
-            max-width: 900px;
+            height: auto;
+            max-width: 1000px;
         }
 
         button {
-            margin-top: 20px;
-            padding: 15px 25px;
-            font-size: 18px;
+            margin: 20px;
+            padding: 15px 30px;
+            font-size: 20px;
             background-color: red;
             color: white;
             border: none;
             cursor: pointer;
+            border-radius: 8px;
         }
 
         #verjaardag {
@@ -30,25 +34,30 @@
         }
     </style>
 </head>
+
 <body>
 
-<img src="winkel.jpg">
+    <!-- Winkel foto -->
+    <div id="winkel">
+        <img src="winkel2.jpg" alt="Winkel">
+    </div>
 
-<br>
+    <!-- Knop -->
+    <button onclick="wisselFoto()">
+        Klik hier op 21 april 2026
+    </button>
 
-<button onclick="toonVerjaardag()">
-Klik hier op 21 april 2026
-</button>
+    <!-- Verjaardag foto -->
+    <div id="verjaardag">
+        <img src="verjaardag2.jpg" alt="Verjaardag">
+    </div>
 
-<div id="verjaardag">
-    <img src="verjaardag.jpg">
-</div>
-
-<script>
-function toonVerjaardag() {
-    document.getElementById("verjaardag").style.display = "block";
-}
-</script>
+    <script>
+        function wisselFoto() {
+            document.getElementById("winkel").style.display = "none";
+            document.getElementById("verjaardag").style.display = "block";
+        }
+    </script>
 
 </body>
 </html>
