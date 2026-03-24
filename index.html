@@ -29,7 +29,7 @@
             border-radius: 8px;
         }
 
-        #verjaardag {
+        #verjaardag, #terugKnop {
             display: none;
         }
     </style>
@@ -42,8 +42,8 @@
         <img src="winkel2.jpg" alt="Winkel">
     </div>
 
-    <!-- Knop -->
-    <button onclick="wisselFoto()">
+    <!-- Knop naar verjaardag -->
+    <button id="naarVerjaardag" onclick="wisselNaarVerjaardag()">
         Klik hier op 21 april 2026
     </button>
 
@@ -52,10 +52,24 @@
         <img src="verjaardag2.jpg" alt="Verjaardag">
     </div>
 
+    <!-- Terug knop -->
+    <button id="terugKnop" onclick="wisselNaarWinkel()">
+        Terug
+    </button>
+
     <script>
-        function wisselFoto() {
+        function wisselNaarVerjaardag() {
             document.getElementById("winkel").style.display = "none";
+            document.getElementById("naarVerjaardag").style.display = "none";
             document.getElementById("verjaardag").style.display = "block";
+            document.getElementById("terugKnop").style.display = "inline-block";
+        }
+
+        function wisselNaarWinkel() {
+            document.getElementById("winkel").style.display = "block";
+            document.getElementById("naarVerjaardag").style.display = "inline-block";
+            document.getElementById("verjaardag").style.display = "none";
+            document.getElementById("terugKnop").style.display = "none";
         }
     </script>
 
