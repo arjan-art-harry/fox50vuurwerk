@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Fox Vuurwerk</title>
+    <title>Fox Vuurwerk Mega Feest!</title>
 
     <style>
         body {
@@ -10,12 +10,24 @@
             background-color: black;
             text-align: center;
             font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            position: relative;
         }
 
         img {
             width: 100%;
             height: auto;
             max-width: 1000px;
+            transition: opacity 1s ease;
+            opacity: 1;
+        }
+
+        .hidden {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
         }
 
         button {
@@ -27,29 +39,99 @@
             border: none;
             cursor: pointer;
             border-radius: 8px;
+            z-index: 10;
+            position: relative;
         }
 
         #verjaardag, #terugKnop {
             display: none;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            opacity: 0.9;
+            border-radius: 50%;
+            animation-name: fall;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        /* Knipperende lichtjes */
+        .lichtjes {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 9999;
+        }
+
+        .licht {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: red;
+            animation: knipper 1s infinite;
+        }
+
+        .licht:nth-child(2) { background-color: yellow; animation-delay: 0.2s; }
+        .licht:nth-child(3) { background-color: green; animation-delay: 0.4s; }
+        .licht:nth-child(4) { background-color: blue; animation-delay: 0.6s; }
+        .licht:nth-child(5) { background-color: magenta; animation-delay: 0.8s; }
+
+        @keyframes knipper {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        /* Vuurwerk-elementen */
+        .vuurwerk {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
         }
     </style>
 </head>
 
 <body>
 
+    <!-- Knipperende lichtjes -->
+    <div class="lichtjes" id="lichtjes" style="display:none;">
+        <div class="licht"></div>
+        <div class="licht"></div>
+        <div class="licht"></div>
+        <div class="licht"></div>
+        <div class="licht"></div>
+    </div>
+
     <!-- Winkel foto -->
     <div id="winkel">
-        <img src="winkel2.jpg" alt="Winkel">
+        <img src="winkel2.jpg" alt="Winkel" id="imgWinkel">
     </div>
 
     <!-- Knop naar verjaardag -->
-    <button id="naarVerjaardag" onclick="wisselNaarVerjaardag()">
+    <button id="naarVerjaardag" onclick="checkDatum()">
         Klik hier op 21 april 2026
     </button>
 
     <!-- Verjaardag foto -->
     <div id="verjaardag">
-        <img src="verjaardag2.jpg" alt="Verjaardag">
+        <img src="verjaardag2.jpg" alt="Verjaardag" id="imgVerjaardag" class="hidden">
     </div>
 
     <!-- Terug knop -->
@@ -57,19 +139,115 @@
         Terug
     </button>
 
+    <!-- Audio bestand voor feest -->
+    <audio id="feestAudio" src="feest.mp3" preload="auto"></audio>
+
     <script>
-        function wisselNaarVerjaardag() {
-            document.getElementById("winkel").style.display = "none";
-            document.getElementById("naarVerjaardag").style.display = "none";
-            document.getElementById("verjaardag").style.display = "block";
-            document.getElementById("terugKnop").style.display = "inline-block";
+        const startDatum = new Date("2026-02-21T00:01:00");
+
+        function checkDatum() {
+            const nu = new Date();
+            if (nu < startDatum) {
+                alert("Kom later terug");
+            } else {
+                fadeToVerjaardag();
+            }
+        }
+
+        function fadeToVerjaardag() {
+            const winkel = document.getElementById("imgWinkel");
+            const verjaardag = document.getElementById("imgVerjaardag");
+
+            winkel.style.opacity = 0;
+
+            setTimeout(() => {
+                document.getElementById("winkel").style.display = "none";
+                document.getElementById("naarVerjaardag").style.display = "none";
+
+                verjaardag.classList.remove("hidden");
+                document.getElementById("verjaardag").style.display = "block";
+                document.getElementById("terugKnop").style.display = "inline-block";
+
+                document.getElementById("feestAudio").play();
+                document.getElementById("lichtjes").style.display = "flex";
+
+                startConfettiWaves();
+                startVuurwerkWaves();
+            }, 1000);
         }
 
         function wisselNaarWinkel() {
-            document.getElementById("winkel").style.display = "block";
-            document.getElementById("naarVerjaardag").style.display = "inline-block";
-            document.getElementById("verjaardag").style.display = "none";
-            document.getElementById("terugKnop").style.display = "none";
+            const winkel = document.getElementById("imgWinkel");
+            const verjaardag = document.getElementById("imgVerjaardag");
+
+            verjaardag.style.opacity = 0;
+
+            setTimeout(() => {
+                document.getElementById("verjaardag").style.display = "none";
+                document.getElementById("terugKnop").style.display = "none";
+
+                document.getElementById("winkel").style.display = "block";
+                document.getElementById("naarVerjaardag").style.display = "inline-block";
+
+                winkel.style.opacity = 0;
+                setTimeout(() => { winkel.style.opacity = 1; }, 50);
+
+                document.getElementById("lichtjes").style.display = "none";
+            }, 1000);
+        }
+
+        function startConfetti() {
+            const kleuren = ["#ff0", "#f00", "#0f0", "#00f", "#f0f", "#0ff", "#fff"];
+            const shapes = ["50%", "0%", "20%"];
+
+            for (let i = 0; i < 200; i++) {
+                const confetti = document.createElement("div");
+                confetti.classList.add("confetti");
+                confetti.style.backgroundColor = kleuren[Math.floor(Math.random() * kleuren.length)];
+                confetti.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+                confetti.style.left = Math.random() * window.innerWidth + "px";
+                confetti.style.width = 5 + Math.random() * 12 + "px";
+                confetti.style.height = 5 + Math.random() * 12 + "px";
+                confetti.style.animationDuration = 2 + Math.random() * 3 + "s";
+                confetti.style.opacity = 0.7 + Math.random() * 0.3;
+
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 5000 + Math.random() * 3000);
+            }
+        }
+
+        function startConfettiWaves() {
+            let waves = 0;
+            const confettiInterval = setInterval(() => {
+                startConfetti();
+                waves++;
+                if (waves >= 5) clearInterval(confettiInterval); // 5 waves
+            }, 700);
+        }
+
+        function startVuurwerk() {
+            const kleuren = ["#ff0", "#f00", "#0f0", "#00f", "#f0f", "#0ff", "#fff"];
+            for (let i = 0; i < 50; i++) {
+                const vuurwerk = document.createElement("div");
+                vuurwerk.classList.add("vuurwerk");
+                vuurwerk.style.backgroundColor = kleuren[Math.floor(Math.random() * kleuren.length)];
+                vuurwerk.style.left = Math.random() * window.innerWidth + "px";
+                vuurwerk.style.top = Math.random() * 200 + "px";
+                vuurwerk.style.width = 5 + Math.random() * 10 + "px";
+                vuurwerk.style.height = 5 + Math.random() * 10 + "px";
+                document.body.appendChild(vuurwerk);
+
+                setTimeout(() => vuurwerk.remove(), 3000);
+            }
+        }
+
+        function startVuurwerkWaves() {
+            let rounds = 0;
+            const vuurwerkInterval = setInterval(() => {
+                startVuurwerk();
+                rounds++;
+                if (rounds >= 5) clearInterval(vuurwerkInterval); // 5 rounds
+            }, 1000);
         }
     </script>
 
